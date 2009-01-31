@@ -53,8 +53,8 @@
 					</p>
 					<p>
 						Gemer It is built and maintained by <a href="http://twitter.com/bontakun">Benjamin "bonta-kun"</a> 
-						of <a href="http://bonta-kun.net">bonta-kun.net</a>. Source code will be made 
-						available shortly as a link on the <a href="http://bonta-kun.net/wp/">bonta-kun.net blog</a>.
+						of <a href="http://bonta-kun.net">bonta-kun.net</a>. Source code is available at
+						 <a href="http://gemerit.com/62">the bonta-kun.net svn repository</a>.
 					</p>
 					
 				</div>
