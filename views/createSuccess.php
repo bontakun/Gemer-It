@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<title>Gemer It: Results</title>
-		<link rel="stylesheet" type="text/css" href="style.css" />
+		<link rel="stylesheet" type="text/css" href="style/style.css" />
 		<meta name="viewport" content="width=630" />
 		<script type="text/javascript" >
 			var link = "<?php echo($url); ?>";

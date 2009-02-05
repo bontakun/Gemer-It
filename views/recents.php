@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<title>Gemer It: Recent Links</title>
-		<link rel="stylesheet" type="text/css" href="style.css" />
+		<link rel="stylesheet" type="text/css" href="style/style.css" />
 		<meta name="viewport" content="width=630" />
 	</head>
 	<body>
