@@ -1,0 +1,11 @@
+table.results {
+	vertical-align: middle;
+	border-spacing: 2px 2px;
+	border-color: gray;
+	border-collapse: separate;
+}
+
+td.id {
+	text-align: center;
+	min-width: 75px;
+}
