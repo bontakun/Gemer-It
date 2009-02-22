@@ -23,5 +23,12 @@
 	}
 
 	//push to view
-	require("views/createSuccess.php");
+	if (stristr($_REQUEST["format"], "text"))
+		require("views/createSuccessPlain.php");
+	else if (stristr($_REQUEST["format"], "xml"))
+		require("views/createSuccessXML.php");
+	else if (stristr($_REQUEST["format"], "JSON"))
+		require("views/createSuccessJSON.php");	
+	else
+		require("views/createSuccess.php");
 ?>

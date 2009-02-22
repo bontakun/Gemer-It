@@ -22,5 +22,8 @@ div.container {
   margin-right: auto;
 }
 
+li, h3 {
+	text-align: left;
+}
 
 

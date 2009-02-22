@@ -1,0 +1,12 @@
+div.explanations h2, div.explanations p, div.explanations h3, div.explanations li {
+  text-align: left;
+}	
+
+div.container {
+	max-width: 100%;
+	width: 100%;
+}
+
+td {
+	padding: 4px;
+}

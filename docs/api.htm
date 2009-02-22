@@ -1,0 +1,155 @@
+<html>
+	<head>
+		<title>Gemer It: API</title>
+		<meta name="viewport" content="width=630" />
+		<link rel="stylesheet" type="text/css" href="../style/global.css" />
+		<link rel="stylesheet" type="text/css" href="../style/api.css" / > 
+	</head>
+	<body>
+		<div class="container">
+	  	<div class="headerSection">
+	  		<h1>Gemer It: URL Shortening Service API</h1>
+	  	</div>
+	  	<div class="explanations">
+	  		<h2>Basics</h2>
+	  		<p>
+	  			Gemer it is a full featured URL service, that given a url it will take a
+	  			url such as <a href="http://bonta-kun.net">http://bonta-kun.net</a> 
+	  			and shorten it to <a href="http://gemerit.com/2">http://gemerit.com/2</a>.
+	  		</p>
+			
+				<h2>Requirements</h2>
+	  		<p>  		
+		  		The API supports 3 formats for retrieving the URL data in: 
+		  		<ul>
+		  	  	<li><a href="http://wikipedia.org/wiki/JSON">JSON</a>,</li>
+		  	  	<li><a href="http://wikipedia.org/wiki/XML">XML</a>, and</li>
+		  	  	<li>plain text</li>
+		  	  </ul>
+		  	</p>
+		  	
+		  	<p>
+		  	  These formats can requested in two ways depending on your preference either
+		  	  as a parameter provided to create.php (such as 
+		  	  <code>http://gemerit.php?format=JSON...</code>) or as the extension for 
+		  	  create (such as <code>http://gemerit.json...</code>), if no format is 
+		  	  supplied the default HTML view will be used.
+		  	</p>
+		  	 
+		  	<p>
+		  		The second requirement is the <code>url</code> parameter. It must be supplied via GET or 
+		  		POST, and it should contain the url you desire to shorten.
+	  		</p>
+	  		
+	  		<h2>Parameter Outline</h2>
+	  		<h3><code>format</code></h3>
+	  		<p>
+	  			Allowed values:
+	  			<ul>
+	  				<li><code>text</code></li>
+	  				<li><code>json</code></li>
+	  				<li><code>xml</code></li>
+	  			</ul>
+				</p>
+	  		<h3><code>url</code></h3>
+	  		<p>
+	  			This merely takes the URL, gemer it is supposed to shorten
+	  		</p>
+	  		
+	  		<h2>Examples</h2>
+	  		<p>
+	  			In the interest of making all these links live, I've used GET parameters,
+	  			but they would have worked just as well with POST parameters
+	  			<table>
+	  				<tr>
+	  					<th>Given Url</th>
+	  					<th>Result</th>
+	  				</tr>
+	  				
+	  				<tr>
+	  					<td>
+	  						<a href="http://gemerit.com/create.php?format=text&url=http://bonta-kun.net">
+	 	 							<code>
+	 	 								http://gemerit.com/create.php?format=text&url=http://bonta-kun.net
+	 	 							</code>
+	 	 						</a>
+	 	 					</td>
+	  					<td>
+	  						<code>http://gemerit.com/2</code>
+	  					</td>
+	  				</tr>
+	  				
+	  				<tr>
+	  					<td>
+	  						<a href="http://gemerit.com/create.text?url=http://bonta-kun.net">
+	 	 							<code>
+	 	 								http://gemerit.com/create.text?url=http://bonta-kun.net
+	 	 							</code>
+	 	 						</a>
+	 	 					</td>
+	  					<td>
+	  						<code>http://gemerit.com/2</code>
+	  					</td>
+	  				</tr>
+	  				
+	  				<tr>
+	  					<td>
+	  						<a href="http://gemerit.com/create.php?format=json&url=http://bonta-kun.net">
+	 	 							<code>
+	 	 								http://gemerit.com/create.php?format=json&url=http://bonta-kun.net
+	 	 							</code>
+	 	 						</a>
+	 	 					</td>
+	  					<td>
+	  						<code>{ "urls": ["http://gemerit.com/2"] }</code>
+	  					</td>
+	  				</tr>
+	  				
+	  				<tr>
+	  					<td>
+	  						<a href="http://gemerit.com/create.json?url=http://bonta-kun.net">
+	 	 							<code>
+	 	 								http://gemerit.com/create.json?url=http://bonta-kun.net
+	 	 							</code>
+	 	 						</a>
+	 	 					</td>
+	  					<td>
+  							<code>{ "urls": ["http://gemerit.com/2"] }</code>
+	  					</td>
+	  				</tr>
+	  				
+	  				<tr>
+	  					<td>
+	  						<a href="http://gemerit.com/create.php?format=xml&url=http://bonta-kun.net">
+	 	 							<code>
+	 	 								http://gemerit.com/create.php?format=xml&url=http://bonta-kun.net
+	 	 							</code>
+	 	 						</a>
+	 	 					</td>
+	  					<td>
+  							<code>&lt;URLs&gt;
+	&lt;URL&gt;http://gemerit.com/2&lt;/URL&gt;
+&lt;/URLs&gt;</code>
+	  					</td>
+	  				</tr>
+	  				
+	  				<tr>
+	  					<td>
+	  						<a href="http://gemerit.com/create.xml?url=http://bonta-kun.net">
+	 	 							<code>
+	 	 								http://gemerit.com/create.xml?url=http://bonta-kun.net
+	 	 							</code>
+	 	 						</a>
+	 	 					</td>
+	  					<td>
+  							<code>&lt;URLs&gt;
+	&lt;URL&gt;http://gemerit.com/2&lt;/URL&gt;
+&lt;/URLs&gt;</code>
+	  					</td>
+	  				</tr>
+	  			</table>
+	  		</p>
+	  		
+	  	</div>
+	</body>
+<html>
