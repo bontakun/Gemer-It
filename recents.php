@@ -2,7 +2,7 @@
 <?php 
 	require("models/library.php");
 	
-	$recents = getRecents(20);
+	$recents = getRecents(30);
 
 	//push to view
 	require("views/recents.php");

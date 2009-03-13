@@ -1,0 +1,1 @@
+setTimeout("document.getElementById('megas').style.display='block';", 300000);

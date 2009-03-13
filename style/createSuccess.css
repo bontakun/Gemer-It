@@ -1,0 +1,61 @@
+html, body {
+	margin: 0px;
+	padding: 0px;
+	overflow: hidden;
+}
+
+ul, li {
+	-webkit-padding-start: 0px;
+	list-style-type: none;
+	text-align: center;
+	margin: 0px auto 0px auto;
+}
+
+/* mega man easter egg stuff */
+div#megas {
+	display: none;
+}
+
+@-webkit-keyframes 'run' {
+	from {
+		left: 0px;
+    top: 0px;
+  }
+
+  to {
+    left: 100%;
+    top: 0px;
+  }
+}
+
+div.mega {
+	height: 24px;
+	position: relative;
+}
+
+div.mega img {
+	position: absolute;
+	top: 0px;
+	left: -50px;
+	
+	-webkit-animation-name: 'run';
+	-webkit-animation-duration: 9s;
+	-webkit-animation-iteration-count: infinite;
+  -webkit-animation-timing-function: linear;
+}
+
+div.megax {
+	height: 40px;
+	position: relative;
+}
+
+div.megax img {
+	position: absolute;
+	top: 0px;
+	left: -50px;
+	
+	-webkit-animation-name: 'run';
+	-webkit-animation-duration: 8s;
+	-webkit-animation-iteration-count: infinite;
+  -webkit-animation-timing-function: linear;
+}

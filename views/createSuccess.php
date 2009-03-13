@@ -3,42 +3,63 @@
 	<head>
 		<title>Gemer It: Results</title>
 		<link rel="stylesheet" type="text/css" href="style/global.css" />
+		<link rel="stylesheet" type="text/css" href="style/createSuccess.css" />
 		<meta name="viewport" content="width=630" />
+		<script type="text/javascript" src="js/megaman.js" ></script>
 		<script type="text/javascript">
 			var link = "<?php echo($url); ?>";
 		</script>
 	</head>
 	<body>
-	<div class="container">
-		<h2>Your Link Is:</h2>
-		<p id="link">
-			<span><?php echo($url); ?></span>
-			<!--
-			<div class="flashBox">
-				<embed src="http://gemerit.com/swf/clipboard.swf" flashvars="txtToCopy=<?php echo $url; ?>" width="60" height="30">
-				</embed>
-			</div>
-			-->
-		</p>
-		
+		<div class="container">
+			<h2>Your Link Is:</h2>
+			<p id="link">
+				<span><?php echo($url); ?></span>
+			</p>
+	
+			<h2>Links</h2>
+			<ul>
+				<li><a href="/">Gemer Up Another</a></li>
+				<li><a href="<?php echo($url); ?>" target="_blank">Test Link (in New Window)</a></li>
+				<li><a href="http://twitter.com/home?status=<?php echo($url); ?>">Post to Twitter</a></li>
 <?php 
-	if($iphoneStuff) {
+	if(stristr($_SERVER["HTTP_USER_AGENT"], "iPhone")) {
 ?>
-		<h2>Bonus iPhone Links</h2>
-		<p>
-				<span>
+				<li>
 					<a href="javascript:void(window.location='twitterrific:///post?message='+escape(link))">
 						Post to Twitterific
 					</a>
-				</span>
-		</p>
+				</li>
 <?php
 	}
 ?>
-		<h2>Other</h2>
-		<p>
-			<a href="/">Gemer Up Another</a>
-		</p>
-	</div>
+			</ul>
+		</div>
+		<div id="megas">
+<?php 
+	
+	//some view specific code :D
+	$showRegularMegaMan = rand(0, 10);
+	if ($showRegularMegaMan > 3) {
+	
+?>
+				<div class="mega">
+					<img src="/img/megaman.gif" />
+				</div>
+<?php 
+	
+	}
+	else {
+	
+?>
+				<div class="megax">
+					<img src="/img/megamanx.gif" />
+				</div>
+<?php
+
+	}
+	
+?>
+		</div>
 	</body>
 </html>

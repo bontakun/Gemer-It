@@ -28,8 +28,8 @@
 		if (mysql_num_rows($result) == 0)
 		{
 			//insert
-			$query = "INSERT INTO urls (url) VALUES ('" . 
-				addslashes($url) . "');";
+			$query = "INSERT INTO urls (url, creationDate) VALUES ('" . 
+				addslashes($url) . "', " . time() .  ");";
 			mysql_query($query) or die('Query failed: ' . mysql_error());
 			
 			//get back the thing we just inserted
@@ -87,4 +87,42 @@
 		return $recentShortens;
 	}
 	
+	//
+	// This function duplicates code with createLink, need to fix that,
+	// also this name is not final, it really should be tweaked.
+	//
+	function getHexForURL($url) {
+		$link = dbConnect();
+		
+		$query = "SELECT id FROM urls where url = '" . 
+				addslashes($url) . "';";
+		$result = mysql_query($query) or die('Query failed: ' . mysql_error());
+		
+		if (mysql_num_rows($result) > 0) {
+			$resultArray = mysql_fetch_assoc($result);
+			dbDisconnect($link);
+			return dechex($resultArray["id"]);
+		}
+		else {
+			dbDisconnect($link);
+			return "";
+		}
+	}
+	
+	function getTotalCountsByDay() {
+		$link = dbConnect();
+		
+		$dateArray = array();
+		
+		$query = "SELECT creationDate FROM urls where creationDate > 0;";
+		$result = mysql_query($query) or die('Query failed: ' . mysql_error());
+		
+		while($resultArray = mysql_fetch_array($result, MYSQL_ASSOC)) {
+			$dateString = strtotime(date("F j, Y", $resultArray["creationDate"]));
+			$dateArray[$dateString] = $dateArray[$dateString] + 1;
+		}
+		
+		dbDisconnect($link);
+		return $dateArray;
+	}
 ?>
