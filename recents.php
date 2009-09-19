@@ -2,8 +2,11 @@
 <?php 
 	require("models/library.php");
 	
-	$recents = getRecents(30);
+	$recents = getRecents(50);
 
 	//push to view
-	require("views/recents.php");
+	if(stristr($_SERVER["HTTP_USER_AGENT"], "iPhone"))
+		require("views/recentsMobile.php");
+	else
+		require("views/recents.php");
 ?>

@@ -28,6 +28,8 @@
 		require("views/createSuccessXML.php");
 	else if (stristr($_REQUEST["format"], "JSON"))
 		require("views/createSuccessJSON.php");	
+	else if (stristr($_SERVER["HTTP_USER_AGENT"], "iPhone"))
+		require("views/createSuccessMobile.php");
 	else
 		require("views/createSuccess.php");
 ?>

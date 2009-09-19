@@ -28,8 +28,8 @@
 		if (mysql_num_rows($result) == 0)
 		{
 			//insert
-			$query = "INSERT INTO urls (url, creationDate) VALUES ('" . 
-				addslashes($url) . "', " . time() .  ");";
+			$query = "INSERT INTO urls (url, creationDate, ip) VALUES ('" . 
+				addslashes($url) . "', " . time() .  ", '" . $_ENV["REMOTE_ADDR"] . "');";
 			mysql_query($query) or die('Query failed: ' . mysql_error());
 			
 			//get back the thing we just inserted
@@ -42,17 +42,20 @@
 		$resultArray = mysql_fetch_assoc($result);
 		
 		dbDisconnect($link);
-		return dechex($resultArray["id"]);
+		return "x" . base_convert($resultArray["id"], 10, 36);
 	}
 	
 	//
 	// Get Link function
 	//
-	function getLink($hash) {
+	function getLink($hash, $newHash) {
 		$link = dbConnect();
 		
 		//do our search
-		$query = "SELECT url FROM urls where id = " . hexdec($hash) . ";";
+		if ($newHash) 
+			$query = "SELECT url FROM urls where id = " . base_convert($hash, 36, 10) . ";";
+		else
+			$query = "SELECT url FROM urls where id = " . hexdec($hash) . ";";
 
 		$result = mysql_query($query) or die('Query failed: ' . mysql_error());
 		$resultArray = mysql_fetch_assoc($result);
@@ -72,19 +75,39 @@
 	
 		$recentShortens = array();
 	
-		$query = "SELECT id, url FROM urls ORDER BY id DESC LIMIT " . $count . ";";
+		$query = "SELECT id, url, creationDate FROM urls ORDER BY id DESC LIMIT " . $count . ";";
 		$result = mysql_query($query) or die('Query failed: ' . mysql_error());
 	
 		$i = 0;
 		while ($resultArray = mysql_fetch_array($result, MYSQL_ASSOC)) {
 			$recentShortens[$i] = $resultArray;
 			//add the hash too.
-			$recentShortens[$i]["hash"] = dechex($resultArray["id"]);
+			$recentShortens[$i]["hash"] = "x" . base_convert($resultArray["id"], 10, 36);;
 			$i++;
 		}
 		
 		dbDisconnect($link);
 		return $recentShortens;
+	}
+	
+	function getRecentsByIp($count) {
+		$link = dbConnect();
+	
+		$recentShortens = array();
+	
+		$query = "SELECT id, url, creationDate FROM urls WHERE ip = '" . $_ENV["REMOTE_ADDR"] . "' ORDER BY id DESC LIMIT " . $count . ";";
+		$result = mysql_query($query) or die('Query failed: ' . mysql_error());
+	
+		$i = 0;
+		while ($resultArray = mysql_fetch_array($result, MYSQL_ASSOC)) {
+			$recentShortens[$i] = $resultArray;
+			//add the hash too.
+			$recentShortens[$i]["hash"] = "x" . base_convert($resultArray["id"], 10, 36);;
+			$i++;
+		}
+		
+		dbDisconnect($link);
+		return $recentShortens;	
 	}
 	
 	//
@@ -101,7 +124,7 @@
 		if (mysql_num_rows($result) > 0) {
 			$resultArray = mysql_fetch_assoc($result);
 			dbDisconnect($link);
-			return dechex($resultArray["id"]);
+			return "x" . base_convert($resultArray["id"], 10, 36);;
 		}
 		else {
 			dbDisconnect($link);

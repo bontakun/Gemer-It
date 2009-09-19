@@ -1,5 +1,6 @@
 RewriteEngine on
 RewriteRule ^([0-9abcdef]+)$ /get.php?hash=$1
+RewriteRule ^x(.+)$ /get.php?new=1&hash=$1
 RewriteRule ^n([0-9abcdef]+)$ /getNote.php?hash=$1
 
 RewriteCond %{QUERY_STRING} url=(.*)

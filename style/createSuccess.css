@@ -4,6 +4,23 @@ html, body {
 	overflow: hidden;
 }
 
+div.headerSection {
+	padding: 4px;
+	text-align: center;
+}
+
+div.url, div.url p {
+  text-align: center;
+  padding-top: 0px;
+  margin-top: 0px;
+}
+
+div.links {
+	border-top: 1px solid #676767;
+	border-bottom: 1px solid #676767;
+	background-color: #e6e6e6;
+}
+
 ul, li {
 	-webkit-padding-start: 0px;
 	list-style-type: none;
@@ -11,11 +28,44 @@ ul, li {
 	margin: 0px auto 0px auto;
 }
 
-/* mega man easter egg stuff */
-div#megas {
-	display: none;
+li, h3 {
+	text-align: left;
 }
 
+li {
+	display: inline;
+	border-left: 1px solid #676767;
+	
+	margin: 0px;
+	padding: 0px 4px 0px 4px;
+}
+
+li:first-child {
+	border-left: 0px solid #676767;
+}
+
+div#footer p {
+	padding-top: 6px;
+	margin: auto;
+	width: 600px;
+	clear: both;
+	text-align: center;
+}
+
+a, a:visited {
+	color: black;
+  font-weight: 900;
+  text-decoration: none;
+}
+
+a:hover {
+	color: black;
+  text-decoration: underline;
+}
+
+/* 
+ *mega man easter egg stuff 
+ */
 @-webkit-keyframes 'run' {
 	from {
 		left: 0px;
@@ -29,8 +79,14 @@ div#megas {
 }
 
 div.mega {
+	padding: 0px;
+	margin: 0px;
+	
 	height: 24px;
 	position: relative;
+	
+	background-color: #f1f1f1;
+	border-top: 1px solid #676767;
 }
 
 div.mega img {
@@ -42,20 +98,10 @@ div.mega img {
 	-webkit-animation-duration: 9s;
 	-webkit-animation-iteration-count: infinite;
   -webkit-animation-timing-function: linear;
+  
+  animation-name: 'run';
+	animation-duration: 9s;
+	animation-iteration-count: infinite;
+  animation-timing-function: linear;
 }
-
-div.megax {
-	height: 40px;
-	position: relative;
-}
-
-div.megax img {
-	position: absolute;
-	top: 0px;
-	left: -50px;
-	
-	-webkit-animation-name: 'run';
-	-webkit-animation-duration: 8s;
-	-webkit-animation-iteration-count: infinite;
-  -webkit-animation-timing-function: linear;
-}
+/* end megan man easter egg stuff */
