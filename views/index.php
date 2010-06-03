@@ -1,6 +1,7 @@
 <html>
 	<head>
 		<title>Gemer It: URL Shortening Service</title>
+		<link rel="stylesheet" type="text/css" href="style/global.css" />
 		<link rel="stylesheet" type="text/css" href="style/index.css" />
 		<meta name="version" content="2.0">
 	</head>
@@ -10,7 +11,7 @@
 				<h1>Gemer It: URL Shortening Service</h1>
 				
 				<div id="urlSection">
-					<input type="text" name="url" value="">
+					<input type="url" name="url" id="url" value="" placeholder="Url to Gemer/Shrink" autofocus>
 					<input type="submit" value="Gemer It Up!">
 				</div>
 			</div>
@@ -41,10 +42,11 @@
 					<p>
 						To gemer it up a little easier and faster, I provide the following bookmarklet,
 						All you have to do it drag to your bookmark toolbar: 
-						<a href="javascript:(function(){gemerTainer=document.createElement('div');gemerTainer.setAttribute('style','color:black;border:1px solid black;position:fixed;top:5px;left:5px;background-color:white;z-index:5000000;');gemerFrame=document.createElement('iframe');gemerFrame.setAttribute('src','http://gemerit.com/create.text?url='+escape(location.href));gemerFrame.setAttribute('style','border:none;height:30px;width:200px;');gemerFrame.setAttribute('scrolling','no');gemerTainer.appendChild(gemerFrame);gemerClose=document.createElement('span');gemerClose.setAttribute('style', 'color:black;display:block;margin:auto;text-align:center;cursor:pointer;');gemerClose.innerHTML='close';gemerClose.onclick=function(){document.body.removeChild(gemerTainer);};gemerTainer.appendChild(gemerClose);document.body.appendChild(gemerTainer);})();">Gemer It</a>
+						<a href="javascript:(function(){if(!(document.getElementById('gemerTainerScriptHolder'))){gemerScript=document.createElement('script');gemerScript.setAttribute('id','gemerTainerScriptHolder');gemerScript.setAttribute('src','http://gemerit.com/js/bookmarklet.js');document.body.appendChild(gemerScript);}else{gemerLink();}})();">Gemer It</a>
 					</p><p>
-						Other fun stuff includes: the <a href="http://gemerit.com/blog">gemerblog</a>
-						and the <a href="http://gemerit.com/recents.php">recently created links page</a>.
+						Other fun stuff includes: the <a href="/blog">gemerblog</a>
+						and the <a href="/recents.php">recently created links page</a>.
+						Additionally we have an experimental <a href="/search.php">search page</a> we'd like feedback on.
 					</p>
 				</div>
 				

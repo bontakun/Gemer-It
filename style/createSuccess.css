@@ -1,24 +1,7 @@
-html, body {
-	margin: 0px;
-	padding: 0px;
-	overflow: hidden;
-}
-
-div.headerSection {
-	padding: 4px;
-	text-align: center;
-}
-
 div.url, div.url p {
   text-align: center;
   padding-top: 0px;
   margin-top: 0px;
-}
-
-div.links {
-	border-top: 1px solid #676767;
-	border-bottom: 1px solid #676767;
-	background-color: #e6e6e6;
 }
 
 ul, li {
@@ -43,65 +26,3 @@ li {
 li:first-child {
 	border-left: 0px solid #676767;
 }
-
-div#footer p {
-	padding-top: 6px;
-	margin: auto;
-	width: 600px;
-	clear: both;
-	text-align: center;
-}
-
-a, a:visited {
-	color: black;
-  font-weight: 900;
-  text-decoration: none;
-}
-
-a:hover {
-	color: black;
-  text-decoration: underline;
-}
-
-/* 
- *mega man easter egg stuff 
- */
-@-webkit-keyframes 'run' {
-	from {
-		left: 0px;
-    top: 0px;
-  }
-
-  to {
-    left: 100%;
-    top: 0px;
-  }
-}
-
-div.mega {
-	padding: 0px;
-	margin: 0px;
-	
-	height: 24px;
-	position: relative;
-	
-	background-color: #f1f1f1;
-	border-top: 1px solid #676767;
-}
-
-div.mega img {
-	position: absolute;
-	top: 0px;
-	left: -50px;
-	
-	-webkit-animation-name: 'run';
-	-webkit-animation-duration: 9s;
-	-webkit-animation-iteration-count: infinite;
-  -webkit-animation-timing-function: linear;
-  
-  animation-name: 'run';
-	animation-duration: 9s;
-	animation-iteration-count: infinite;
-  animation-timing-function: linear;
-}
-/* end megan man easter egg stuff */

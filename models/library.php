@@ -16,11 +16,13 @@
 	//
 	// Create Link function
 	//
-	function createLink($url) {
+	function createLink($url, $title) {
+		$title = preg_replace("/[']+/im", "", trim($title));
+	
 		$link = dbConnect();
 	
 		//attempt to retrieve the item
-		$query = "SELECT id FROM urls where url = '" . 
+		$query = "SELECT id FROM urls WHERE url = '" . 
 				addslashes($url) . "';";
 		$result = mysql_query($query) or die('Query failed: ' . mysql_error());
 		
@@ -28,12 +30,13 @@
 		if (mysql_num_rows($result) == 0)
 		{
 			//insert
-			$query = "INSERT INTO urls (url, creationDate, ip) VALUES ('" . 
-				addslashes($url) . "', " . time() .  ", '" . $_ENV["REMOTE_ADDR"] . "');";
+			$query = "INSERT INTO urls (url, creationDate, ip, title) VALUES ('" . 
+				addslashes($url) . "', " . time() .  ", '" . $_ENV["REMOTE_ADDR"] . "', '" . 
+				$title . "');";
 			mysql_query($query) or die('Query failed: ' . mysql_error());
 			
 			//get back the thing we just inserted
-			$query = "SELECT id FROM urls where url = '" . 
+			$query = "SELECT id FROM urls WHERE url = '" . 
 				addslashes($url) . "';";
 			$result = mysql_query($query) or die('Query failed: ' . mysql_error());	
 		}
@@ -42,7 +45,7 @@
 		$resultArray = mysql_fetch_assoc($result);
 		
 		dbDisconnect($link);
-		return "x" . base_convert($resultArray["id"], 10, 36);
+		return getHashCode($resultArray["id"]);
 	}
 	
 	//
@@ -53,9 +56,9 @@
 		
 		//do our search
 		if ($newHash) 
-			$query = "SELECT url FROM urls where id = " . base_convert($hash, 36, 10) . ";";
+			$query = "SELECT url FROM urls WHERE id = " . base_convert($hash, 36, 10) . ";";
 		else
-			$query = "SELECT url FROM urls where id = " . hexdec($hash) . ";";
+			$query = "SELECT url FROM urls WHERE id = " . hexdec($hash) . ";";
 
 		$result = mysql_query($query) or die('Query failed: ' . mysql_error());
 		$resultArray = mysql_fetch_assoc($result);
@@ -73,41 +76,12 @@
 	function getRecents($count) {
 		$link = dbConnect();
 	
-		$recentShortens = array();
-	
-		$query = "SELECT id, url, creationDate FROM urls ORDER BY id DESC LIMIT " . $count . ";";
+		$query = "SELECT id, url, creationDate, title FROM urls ORDER BY id DESC LIMIT " . $count . ";";
 		$result = mysql_query($query) or die('Query failed: ' . mysql_error());
-	
-		$i = 0;
-		while ($resultArray = mysql_fetch_array($result, MYSQL_ASSOC)) {
-			$recentShortens[$i] = $resultArray;
-			//add the hash too.
-			$recentShortens[$i]["hash"] = "x" . base_convert($resultArray["id"], 10, 36);;
-			$i++;
-		}
+		$recentShortens = parseFullResults($result);
 		
 		dbDisconnect($link);
 		return $recentShortens;
-	}
-	
-	function getRecentsByIp($count) {
-		$link = dbConnect();
-	
-		$recentShortens = array();
-	
-		$query = "SELECT id, url, creationDate FROM urls WHERE ip = '" . $_ENV["REMOTE_ADDR"] . "' ORDER BY id DESC LIMIT " . $count . ";";
-		$result = mysql_query($query) or die('Query failed: ' . mysql_error());
-	
-		$i = 0;
-		while ($resultArray = mysql_fetch_array($result, MYSQL_ASSOC)) {
-			$recentShortens[$i] = $resultArray;
-			//add the hash too.
-			$recentShortens[$i]["hash"] = "x" . base_convert($resultArray["id"], 10, 36);;
-			$i++;
-		}
-		
-		dbDisconnect($link);
-		return $recentShortens;	
 	}
 	
 	//
@@ -117,14 +91,14 @@
 	function getHexForURL($url) {
 		$link = dbConnect();
 		
-		$query = "SELECT id FROM urls where url = '" . 
+		$query = "SELECT id FROM urls WHERE url = '" . 
 				addslashes($url) . "';";
 		$result = mysql_query($query) or die('Query failed: ' . mysql_error());
 		
 		if (mysql_num_rows($result) > 0) {
 			$resultArray = mysql_fetch_assoc($result);
 			dbDisconnect($link);
-			return "x" . base_convert($resultArray["id"], 10, 36);;
+			return getHashCode($resultArray["id"]);
 		}
 		else {
 			dbDisconnect($link);
@@ -132,12 +106,15 @@
 		}
 	}
 	
+	//
+	// This get the top links and is organized by day
+	//
 	function getTotalCountsByDay() {
 		$link = dbConnect();
 		
 		$dateArray = array();
 		
-		$query = "SELECT creationDate FROM urls where creationDate > 0;";
+		$query = "SELECT creationDate FROM urls WHERE creationDate > 0;";
 		$result = mysql_query($query) or die('Query failed: ' . mysql_error());
 		
 		while($resultArray = mysql_fetch_array($result, MYSQL_ASSOC)) {
@@ -148,4 +125,41 @@
 		dbDisconnect($link);
 		return $dateArray;
 	}
+	
+	//
+	// This function performs a search on the database
+	//
+	function doSearch($searchTerm) {
+		$searchTerm = preg_replace("/[']+/im", "", trim($searchTerm));
+		$resultsArray = array();
+		
+		if (strlen($searchTerm) > 0) {		
+			$link = dbConnect();
+			
+			$query = "SELECT id, url, title FROM urls WHERE url LIKE '%" . $searchTerm . "%' OR title LIKE '%" . $searchTerm ."%' OR ip LIKE '%" . $searchTerm . "%' ORDER BY id DESC LIMIT 200;" ;
+			$result = mysql_query($query) or die('Query failed: ' . mysql_error());
+			$resultsArray = parseFullResults($result);
+			
+			dbDisconnect($link);
+		} else {
+			$resultsArray = getRecents(50);
+		}
+		return $resultsArray;		
+	}
+	
+	function parseFullResults($result) {
+		$resultsArray = array();
+		$i = 0;
+		while ($resultArray = mysql_fetch_array($result, MYSQL_ASSOC)) {
+			$resultsArray[$i] = $resultArray;
+			$resultsArray[$i]["hash"] = getHashCode($resultArray["id"]);
+			$i++;
+		}
+		return $resultsArray;
+	}
+	
+	function getHashCode($id) {
+		return "x" . base_convert($id, 10, 36);
+	}
+	
 ?>

@@ -16,7 +16,7 @@
 			$url = "http://" . $url;
 		
 		//attempt shorten
-		$hexCode = createLink($url);
+		$hexCode = createLink($url, $title);
 		
 		$url = "http://" . $_SERVER["SERVER_NAME"]  . "/" . $hexCode;
 	}
@@ -28,8 +28,10 @@
 		require("views/createSuccessXML.php");
 	else if (stristr($_REQUEST["format"], "JSON"))
 		require("views/createSuccessJSON.php");	
-	else if (stristr($_SERVER["HTTP_USER_AGENT"], "iPhone"))
-		require("views/createSuccessMobile.php");
+	//else if (stristr($_SERVER["HTTP_USER_AGENT"], "iPhone") || stristr($_SERVER["HTTP_USER_AGENT"], "Android"))
+	//	require("views/createSuccessMobile.php");
+	else if (stristr($_REQUEST["format"], "thin"))
+		require("views/createSuccessThin.php");
 	else
 		require("views/createSuccess.php");
 ?>

@@ -2,6 +2,7 @@
 <html>
 	<head>
 		<title>Gemer It: Results</title>
+		<link rel="stylesheet" type="text/css" href="style/global.css" />
 		<link rel="stylesheet" type="text/css" href="style/createSuccess.css" />
 		<meta name="viewport" content="width=630" />
 		<script type="text/javascript">
@@ -15,24 +16,7 @@
 		</div>
 	
 		<div class="url">
-			<p id="link">
-				<?php echo($url); ?>
-			</p>
-		</div>	
-			
-		<!-- mega man easter egg section -->
-		<div id="megas">
-<?php 
-	//some view specific code :D
-	$showMegaMan = rand(0, 10);
-	if ($showMegaMan <= 1) {
-?>
-				<div class="mega">
-					<img src="img/megaman.gif" />
-				</div>
-<?php 
-	}
-?>
+			<p id="link"><?php echo($url); ?></p>
 		</div>	
 			
 		<div class="links">	
