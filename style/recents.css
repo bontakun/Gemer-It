@@ -1,11 +1,10 @@
-table.results {
-	vertical-align: middle;
-	border-spacing: 2px 2px;
-	border-color: gray;
-	border-collapse: separate;
+a > span.title span.url {
+	display: none;
 }
 
-td.id {
-	text-align: center;
-	min-width: 75px;
+li {
+	list-style-position: outside;
+	list-style-type: none;
+	-webkit-padding-start: 0px;
+	margin: 0px auto 0px auto;
 }
