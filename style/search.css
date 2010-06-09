@@ -8,3 +8,7 @@ li {
 	-webkit-padding-start: 0px;
 	margin: 0px auto 0px auto;
 }
+
+span.match {
+	color: red;
+}

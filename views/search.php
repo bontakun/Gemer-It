@@ -12,7 +12,7 @@
 		<h2>Gemer It Search</h2>
 		<form name="gemerForm" method="get" action="search.php">
 			<span>Search Term: </span>
-			<input type="search" size="72" autofocus placeholder="put search terms in here" name="searchTerm">
+			<input type="search" size="72" autofocus placeholder="put search terms in here" name="searchTerm" value="<?php echo($_REQUEST["searchTerm"]); ?>">
 			<input type="submit" value="Search">
 		</form>
 		
