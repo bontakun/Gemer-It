@@ -11,6 +11,7 @@ div.headerSection {
 
 div.clearer {
 	clear: both;
+	height: 1px;
 }
 
 div#footer {

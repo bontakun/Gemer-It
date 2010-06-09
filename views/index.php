@@ -45,8 +45,7 @@
 						<a href="javascript:(function(){if(!(document.getElementById('gemerTainerScriptHolder'))){gemerScript=document.createElement('script');gemerScript.setAttribute('id','gemerTainerScriptHolder');gemerScript.setAttribute('src','http://gemerit.com/js/bookmarklet.js');document.body.appendChild(gemerScript);}else{gemerLink();}})();">Gemer It</a>
 					</p><p>
 						Other fun stuff includes: the <a href="/blog">gemerblog</a>
-						and the <a href="/recents.php">recently created links page</a>.
-						Additionally we have an experimental <a href="/search.php">search page</a> we'd like feedback on.
+						and the <a href="/search.php">recents and search page</a>.
 					</p>
 				</div>
 				

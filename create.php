@@ -16,7 +16,7 @@
 			$url = "http://" . $url;
 		
 		//attempt shorten
-		$hexCode = createLink($url, $title);
+		$hexCode = createLink($url, $_REQUEST["title"]);
 		
 		$url = "http://" . $_SERVER["SERVER_NAME"]  . "/" . $hexCode;
 	}

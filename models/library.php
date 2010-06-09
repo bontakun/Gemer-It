@@ -27,8 +27,7 @@
 		$result = mysql_query($query) or die('Query failed: ' . mysql_error());
 		
 		//if it's not there we need to insert and retrieve
-		if (mysql_num_rows($result) == 0)
-		{
+		if (mysql_num_rows($result) == 0) {
 			//insert
 			$query = "INSERT INTO urls (url, creationDate, ip, title) VALUES ('" . 
 				addslashes($url) . "', " . time() .  ", '" . $_ENV["REMOTE_ADDR"] . "', '" . 
@@ -53,21 +52,44 @@
 	//
 	function getLink($hash, $newHash) {
 		$link = dbConnect();
-		
-		//do our search
+	
+		//get the id
 		if ($newHash) 
-			$query = "SELECT url FROM urls WHERE id = " . base_convert($hash, 36, 10) . ";";
+			$id = base_convert($hash, 36, 10);
 		else
-			$query = "SELECT url FROM urls WHERE id = " . hexdec($hash) . ";";
+			$id =  hexdec($hash);
 
+		//do our search
+		$query = "SELECT url FROM urls WHERE id = " . $id . ";";
 		$result = mysql_query($query) or die('Query failed: ' . mysql_error());
 		$resultArray = mysql_fetch_assoc($result);
 	
 		//cleanup our URL
 		$url = stripslashes($resultArray["url"]);
 		
+		$query = "UPDATE urls SET visits = visits+1 WHERE id = " . $id;
+		mysql_query($query);
+		
 		dbDisconnect($link);
 		return $url;
+	}
+	
+	//
+	// This gets every piece of info about a given link
+	//
+	function getLinkInfo($hash) {
+		$link = dbConnect();
+	
+		//get the id
+		$id = base_convert($hash, 36, 10);
+
+		//do our search
+		$query = "SELECT * FROM urls WHERE id = " . $id . ";";
+		$result = mysql_query($query) or die('Query failed: ' . mysql_error());
+		$results = parseFullResults($result);
+		
+		dbDisconnect($link);
+		return $results;
 	}
 	
 	//
@@ -76,7 +98,7 @@
 	function getRecents($count) {
 		$link = dbConnect();
 	
-		$query = "SELECT id, url, creationDate, title FROM urls ORDER BY id DESC LIMIT " . $count . ";";
+		$query = "SELECT * FROM urls ORDER BY id DESC LIMIT " . $count . ";";
 		$result = mysql_query($query) or die('Query failed: ' . mysql_error());
 		$recentShortens = parseFullResults($result);
 		
@@ -127,6 +149,22 @@
 	}
 	
 	//
+	//
+	//
+	function getTopLinks($count) {
+		$link = dbConnect();
+		
+		$resultsArray = array();
+		
+		$query = "SELECT * FROM urls ORDER BY visits DESC LIMIT " . $count . ";";
+		$result = mysql_query($query) or die('Query failed: ' . mysql_error());
+		$resultsArray = parseFullResults($result);
+		
+		dbDisconnect($link);
+		return $resultsArray;
+	}
+	
+	//
 	// This function performs a search on the database
 	//
 	function doSearch($searchTerm) {
@@ -136,13 +174,13 @@
 		if (strlen($searchTerm) > 0) {		
 			$link = dbConnect();
 			
-			$query = "SELECT id, url, title FROM urls WHERE url LIKE '%" . $searchTerm . "%' OR title LIKE '%" . $searchTerm ."%' OR ip LIKE '%" . $searchTerm . "%' ORDER BY id DESC LIMIT 200;" ;
+			$query = "SELECT * FROM urls WHERE url LIKE '%" . $searchTerm . "%' OR title LIKE '%" . $searchTerm ."%' OR ip LIKE '%" . $searchTerm . "%' ORDER BY id DESC LIMIT 200;" ;
 			$result = mysql_query($query) or die('Query failed: ' . mysql_error());
 			$resultsArray = parseFullResults($result);
 			
 			dbDisconnect($link);
 		} else {
-			$resultsArray = getRecents(50);
+			$resultsArray = getRecents(30);
 		}
 		return $resultsArray;		
 	}

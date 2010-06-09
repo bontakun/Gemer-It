@@ -2,6 +2,7 @@ RewriteEngine on
 RewriteRule ^([0-9abcdef]+)$ /get.php?hash=$1
 RewriteRule ^x(.+)$ /get.php?new=1&hash=$1
 RewriteRule ^n([0-9abcdef]+)$ /getNote.php?hash=$1
+RewriteRule ^about/x(.+)$ /about.php?hash=$1
 
 RewriteCond %{QUERY_STRING} url=(.*)
 RewriteRule ^create.(json|xml|text)$ /create.php?format=$1&url=%1
@@ -10,5 +11,7 @@ RewriteRule ^create.(json|xml|text)$ /create.php?format=$1
 
 RewriteCond %{HTTP_HOST} ^www\.gemerit\.com$
 RewriteRule (.*) http://gemerit.com/$1 [R=Permanent]
+
+Redirect 301 /recents.php http://gemerit.com/search.php
 
 AddHandler php5-script .php

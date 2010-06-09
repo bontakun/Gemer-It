@@ -3,6 +3,7 @@
 	<head>
 		<title>Gemer It: Search</title>
 		<link rel="stylesheet" type="text/css" href="style/global.css" />
+		<link rel="stylesheet" type="text/css" href="style/about.css" />
 		<link rel="stylesheet" type="text/css" href="style/search.css" />
 		<meta name="viewport" content="width=630" />
 	</head>
@@ -18,10 +19,10 @@
 <?php 
 		if (strlen(trim($_REQUEST["searchTerm"])) == 0) { 
 ?> 
-		<div>The default results below are the recently created links.</div>
+		<p>The default results below are the recently created links.</p>
 <?php		
 		}
-		require("recentsSection.php") 
+		require("recentsSection.php");
 ?>
 	</div>
 	</body>
