@@ -10,3 +10,12 @@ div.container {
 td {
 	padding: 4px;
 }
+
+div.gemerCommand {
+	border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+	border: 1px solid black;
+	padding: 4px;
+	margin: 4px;
+}

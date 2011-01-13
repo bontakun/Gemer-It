@@ -3,14 +3,13 @@
 	<head>
 		<title>Gemer It: Results</title>
 		<link rel="stylesheet" type="text/css" href="style/global.css" />
-		<link rel="stylesheet" type="text/css" href="style/createSuccess.css" />
 		<meta name="viewport" content="width=630" />
 		<script type="text/javascript">
 			var link = "<?php echo($url); ?>";
 		</script>
 	</head>
 	<body>
-	
+		<?php require("settings.php"); ?>
 		<div class="headerSection">
 			<h1>Gemer It: Results</h1>			
 		</div>
@@ -34,5 +33,9 @@
 	  		of <a href="http://bonta-kun.net">bonta-kun.net</a>.
 	  	</p>
 		</div>
+<?php		
+		require("music.php");
+		getMusic("/media/created.mp3");
+?>
 	</body>
 </html>

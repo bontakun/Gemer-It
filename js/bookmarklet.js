@@ -3,8 +3,8 @@ function gemerLink() {
 	gemerTainer.setAttribute('style','color:black;border:3px solid #6c6c6c;position:fixed;top:5px;left:5px;background-color:white;z-index:5000000;-moz-border-radius:5px;-webkit-border-radius:5px;border-radius: 5px;float:none;');
 
 	var gemerFrame = document.createElement("iframe");
-	gemerFrame.setAttribute('src','http://gemerit.com/create.text?url='+escape(location.href)+"&title="+document.title);
-	gemerFrame.setAttribute('style','border:none;height:30px;width:200px;');
+	gemerFrame.setAttribute('src','http://gemerit.com/create.php?format=thin&url='+escape(window.location)+"&title="+escape(document.title));
+	gemerFrame.setAttribute('style','border:none;height:30px;width:200px;z-index:500000;');
 	gemerFrame.setAttribute('scrolling','no');
 	gemerTainer.appendChild(gemerFrame);
 

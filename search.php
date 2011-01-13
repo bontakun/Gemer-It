@@ -1,6 +1,12 @@
-<?php /* controller/model */ ?>
-<?php 
+<?php /* controller/model */ 
 	require("models/library.php");
 	$results = doSearch($_REQUEST['searchTerm']);
-	require("views/search.php");
+	
+	if ($_REQUEST["format"] == "rss") {
+		require("views/searchRss.php");
+	} else if ($_REQUEST["format"] == "xml") {
+		require("views/searchXML.php");
+	} else {
+		require("views/search.php");
+	}
 ?>

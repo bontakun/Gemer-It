@@ -8,7 +8,7 @@
 	<body>
 		<div class="container">
 	  	<div class="headerSection">
-	  		<h1>Gemer It: URL Shortening Service API</h1>
+	  		<h1>Gemer It API</h1>
 	  	</div>
 	  	<div class="explanations">
 	  		<h2>Basics</h2>
@@ -16,16 +16,14 @@
 	  			Gemer it is a full featured URL service, that given a url it will take a
 	  			url such as <a href="http://bonta-kun.net">http://bonta-kun.net</a> 
 	  			and shorten it to <a href="http://gemerit.com/2">http://gemerit.com/2</a>.
+	  			There are additional functions for searching an un-gemering links described below.
 	  		</p>
 			
 				<h2>Requirements</h2>
 	  		<p>  		
-		  		The API supports 3 formats for retrieving the URL data in: 
-		  		<ul>
-		  	  	<li><a href="http://wikipedia.org/wiki/JSON">JSON</a>,</li>
-		  	  	<li><a href="http://wikipedia.org/wiki/XML">XML</a>, and</li>
-		  	  	<li>plain text</li>
-		  	  </ul>
+		  		The API generally supports 3 formats for retrieving the URL data in: 
+		  		<a href="http://wikipedia.org/wiki/JSON">JSON</a>,
+		  		<a href="http://wikipedia.org/wiki/XML">XML</a>, and plain text.
 		  	</p>
 		  	
 		  	<p>
@@ -36,119 +34,159 @@
 		  	  supplied the default HTML view will be used.
 		  	</p>
 		  	 
-		  	<p>
-		  		The second requirement is the <code>url</code> parameter. It must be supplied via GET or 
-		  		POST, and it should contain the url you desire to shorten.
-	  		</p>
+		  	 
+		  	<h2>Gemer Commands</h2> 
+		  	
+		  	<div class="gemerCommand">
+			  	<h3>Create</h3>
+			  	<hr>
+			  	<p>
+			  		The create command takes a <code>url</code> parameter. It must be supplied via GET or 
+			  		POST, and it should contain the url you desire to shorten.
+		  		</p>
+		  		
+		  		<h4>Parameter Outline</h4>
+		  		<h5><code>format</code></h5>
+		  		<p>
+		  			Allowed values:
+		  			<ul>
+		  				<li><code>text</code></li>
+		  				<li><code>json</code></li>
+		  				<li><code>xml</code></li>
+		  			</ul>
+					</p>
+		  		<h5><code>url</code></h5>
+		  		<p>This merely takes the URL, gemer it is supposed to shorten</p>
+		  		
+		  		<h4>Examples</h4>
+		  		<p>
+		  			In the interest of making all these links live, I've used GET parameters,
+		  			but they would have worked just as well with POST parameters
+		  			<table>
+		  				<tr>
+		  					<th>Given Url</th>
+		  					<th>Result</th>
+		  				</tr><tr>
+		  					<td>
+		  						<a href="http://gemerit.com/create.php?format=text&url=http://bonta-kun.net">
+		 	 							<code>http://gemerit.com/create.php?format=text&url=http://bonta-kun.net</code>
+		 	 						</a>
+		 	 					</td>
+		  					<td><code>http://gemerit.com/2</code></td>
+		  				</tr><tr>
+		  					<td>
+		  						<a href="http://gemerit.com/create.text?url=http://bonta-kun.net">
+		 	 							<code>http://gemerit.com/create.text?url=http://bonta-kun.net</code>
+		 	 						</a>
+		 	 					</td>
+		  					<td><code>http://gemerit.com/2</code></td>
+		  				</tr><tr>
+		  					<td>
+		  						<a href="http://gemerit.com/create.php?format=json&url=http://bonta-kun.net">
+		 	 							<code>http://gemerit.com/create.php?format=json&url=http://bonta-kun.net</code>
+		 	 						</a>
+		 	 					</td>
+		  					<td><code>{ "urls": ["http://gemerit.com/2"] }</code></td>
+		  				</tr><tr>
+		  					<td>
+		  						<a href="http://gemerit.com/create.json?url=http://bonta-kun.net">
+		 	 							<code>http://gemerit.com/create.json?url=http://bonta-kun.net</code>
+		 	 						</a>
+		 	 					</td>
+		  					<td><code>{ "urls": ["http://gemerit.com/2"] }</code></td>
+		  				</tr><tr>
+		  					<td>
+		  						<a href="http://gemerit.com/create.php?format=xml&url=http://bonta-kun.net">
+		 	 							<code>http://gemerit.com/create.php?format=xml&url=http://bonta-kun.net</code>
+		 	 						</a>
+		 	 					</td>
+		  					<td><code>&lt;URLs&gt;&lt;URL&gt;http://gemerit.com/2&lt;/URL&gt;&lt;/URLs&gt;</code></td>
+		  				</tr><tr>
+		  					<td>
+		  						<a href="http://gemerit.com/create.xml?url=http://bonta-kun.net">
+		 	 							<code>http://gemerit.com/create.xml?url=http://bonta-kun.net</code>
+		 	 						</a>
+		 	 					</td>
+		  					<td><code>&lt;URLs&gt;&lt;URL&gt;http://gemerit.com/2&lt;/URL&gt;&lt;/URLs&gt;</code></td>
+		  				</tr>
+		  			</table>
+		  		</p>
+	  		</div>
 	  		
-	  		<h2>Parameter Outline</h2>
-	  		<h3><code>format</code></h3>
-	  		<p>
-	  			Allowed values:
-	  			<ul>
-	  				<li><code>text</code></li>
-	  				<li><code>json</code></li>
-	  				<li><code>xml</code></li>
-	  			</ul>
-				</p>
-	  		<h3><code>url</code></h3>
-	  		<p>
-	  			This merely takes the URL, gemer it is supposed to shorten
-	  		</p>
+	  		<div class="gemerCommand">
+			  	<h3>About</h3>
+			  	<hr>
+			  	<p>
+			  		In progress... coming at a later point.
+		  		</p>
+	  		</div>
 	  		
-	  		<h2>Examples</h2>
-	  		<p>
-	  			In the interest of making all these links live, I've used GET parameters,
-	  			but they would have worked just as well with POST parameters
-	  			<table>
-	  				<tr>
-	  					<th>Given Url</th>
-	  					<th>Result</th>
-	  				</tr>
-	  				
-	  				<tr>
-	  					<td>
-	  						<a href="http://gemerit.com/create.php?format=text&url=http://bonta-kun.net">
-	 	 							<code>
-	 	 								http://gemerit.com/create.php?format=text&url=http://bonta-kun.net
-	 	 							</code>
-	 	 						</a>
-	 	 					</td>
-	  					<td>
-	  						<code>http://gemerit.com/2</code>
-	  					</td>
-	  				</tr>
-	  				
-	  				<tr>
-	  					<td>
-	  						<a href="http://gemerit.com/create.text?url=http://bonta-kun.net">
-	 	 							<code>
-	 	 								http://gemerit.com/create.text?url=http://bonta-kun.net
-	 	 							</code>
-	 	 						</a>
-	 	 					</td>
-	  					<td>
-	  						<code>http://gemerit.com/2</code>
-	  					</td>
-	  				</tr>
-	  				
-	  				<tr>
-	  					<td>
-	  						<a href="http://gemerit.com/create.php?format=json&url=http://bonta-kun.net">
-	 	 							<code>
-	 	 								http://gemerit.com/create.php?format=json&url=http://bonta-kun.net
-	 	 							</code>
-	 	 						</a>
-	 	 					</td>
-	  					<td>
-	  						<code>{ "urls": ["http://gemerit.com/2"] }</code>
-	  					</td>
-	  				</tr>
-	  				
-	  				<tr>
-	  					<td>
-	  						<a href="http://gemerit.com/create.json?url=http://bonta-kun.net">
-	 	 							<code>
-	 	 								http://gemerit.com/create.json?url=http://bonta-kun.net
-	 	 							</code>
-	 	 						</a>
-	 	 					</td>
-	  					<td>
-  							<code>{ "urls": ["http://gemerit.com/2"] }</code>
-	  					</td>
-	  				</tr>
-	  				
-	  				<tr>
-	  					<td>
-	  						<a href="http://gemerit.com/create.php?format=xml&url=http://bonta-kun.net">
-	 	 							<code>
-	 	 								http://gemerit.com/create.php?format=xml&url=http://bonta-kun.net
-	 	 							</code>
-	 	 						</a>
-	 	 					</td>
-	  					<td>
-  							<code>&lt;URLs&gt;
-	&lt;URL&gt;http://gemerit.com/2&lt;/URL&gt;
-&lt;/URLs&gt;</code>
-	  					</td>
-	  				</tr>
-	  				
-	  				<tr>
-	  					<td>
-	  						<a href="http://gemerit.com/create.xml?url=http://bonta-kun.net">
-	 	 							<code>
-	 	 								http://gemerit.com/create.xml?url=http://bonta-kun.net
-	 	 							</code>
-	 	 						</a>
-	 	 					</td>
-	  					<td>
-  							<code>&lt;URLs&gt;
-	&lt;URL&gt;http://gemerit.com/2&lt;/URL&gt;
-&lt;/URLs&gt;</code>
-	  					</td>
-	  				</tr>
-	  			</table>
-	  		</p>
+	  		<div class="gemerCommand">
+			  	<h3>Search</h3>
+			  	<hr>
+			  	<p>
+			  		The search command takes a <code>searchTerm</code> parameter. It must be supplied via GET or 
+			  		POST, and it should contain the search term you want to search for.
+		  		</p>
+		  		
+		  		<h4>Parameter Outline</h4>
+		  		<h5><code>format</code></h5>
+		  		<p>
+		  			Allowed values:
+		  			<ul>
+		  				<li><code>rss</code></li>
+		  				<li><code>xml</code></li>
+		  			</ul>
+					</p>
+		  		<h5><code>searchTerm</code></h5>
+		  		<p>This is the search term, it will search the url, title and ip address. It is wildcarded, but otherwise is not very intelligent.</p>
+		  		
+		  		<h4>Examples</h4>
+		  		<p>
+		  			In the interest of making all these links live, I've used GET parameters,
+		  			but they would have worked just as well with POST parameters
+		  			<table>
+		  				<tr>
+		  					<th>Given Url</th>
+		  					<th>Result</th>
+		  				</tr><tr>
+		  					<td>
+		  						<a href="http://gemerit.com/search.php?format=xml&searchTerm=thebontakun/4461003153">
+		 	 							<code>http://gemerit.com/search.php?format=xmlsearchTerm=thebontakun/4461003153</code>
+		 	 						</a>
+		 	 					</td>
+		  					<td><code>
+&lt;results&gt;<br />
+&nbsp;&nbsp;&lt;gemerLink&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;title&gt;Domobook on Flickr - Photo Sharing!&lt;/title&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;shortUrl&gt;http://gemerit.com/x1r2&lt;/shortUrl&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;visits&gt;1&lt;/visits&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;creationDate&gt;1271010712&lt;/creationDate&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;longUrl&gt;http://www.flickr.com/photos/thebontakun/4461003153/&lt;/longUrl&gt;<br />
+&nbsp;&nbsp;&lt;/gemerLink&gt;<br />
+&lt;results&gt;<br />
+								</code></td>
+		  				</tr><tr>
+		  					<td>
+		  						<a href="http://gemerit.com/search.xml?searchTerm=thebontakun/4461003153">
+		 	 							<code>http://gemerit.com/create.xml?searchTerm=thebontakun/4461003153</code>
+		 	 						</a>
+		 	 					</td>
+		  					<td><code>
+&lt;results&gt;<br />
+&nbsp;&nbsp;&lt;gemerLink&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;title&gt;Domobook on Flickr - Photo Sharing!&lt;/title&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;shortUrl&gt;http://gemerit.com/x1r2&lt;/shortUrl&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;visits&gt;1&lt;/visits&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;creationDate&gt;1271010712&lt;/creationDate&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;longUrl&gt;http://www.flickr.com/photos/thebontakun/4461003153/&lt;/longUrl&gt;<br />
+&nbsp;&nbsp;&lt;/gemerLink&gt;<br />
+&lt;results&gt;<br />
+								</code></td>
+		  				</tr>
+		  			</table>
+		  		</p>
+	  		</div>
 	  		
 	  	</div>
 	</body>

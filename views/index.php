@@ -2,10 +2,16 @@
 	<head>
 		<title>Gemer It: URL Shortening Service</title>
 		<link rel="stylesheet" type="text/css" href="style/global.css" />
-		<link rel="stylesheet" type="text/css" href="style/index.css" />
+		<style>
+			html, body {
+					margin: 0px;
+					padding: 0px;
+			}
+		</style>
 		<meta name="version" content="2.0">
 	</head>
 	<body>
+		<?php require("settings.php"); ?>
 		<form name="gemerForm" method="get" action="create.php">
 			<div class="headerSection">
 				<h1>Gemer It: URL Shortening Service</h1>
@@ -29,11 +35,9 @@
 					<h2>Why</h2>
 					<p>
 						This page was primarily built as challenge. It was originally built as an experiment
-						in building simple services in a very short period of time. I still consider it beta
-						(Google style) because I feel it's quite complete just yet.
-						So please try to break it. Please
-						use <a href="http://bonta-kun.net/contact/?subject=gemerit">contact page</a> 
-						for reporting bugs.
+						in building simple services in a very short period of time. 
+						Gemer it is a constant work in progress, so be prepared for changes.
+						Please use <a href="http://bonta-kun.net/contact/?subject=gemerit">contact page</a> for reporting bugs.
 					</p>
 				</div>
 				
@@ -45,7 +49,7 @@
 						<a href="javascript:(function(){if(!(document.getElementById('gemerTainerScriptHolder'))){gemerScript=document.createElement('script');gemerScript.setAttribute('id','gemerTainerScriptHolder');gemerScript.setAttribute('src','http://gemerit.com/js/bookmarklet.js');document.body.appendChild(gemerScript);}else{gemerLink();}})();">Gemer It</a>
 					</p><p>
 						Other fun stuff includes: the <a href="/blog">gemerblog</a>
-						and the <a href="/search.php">recents and search page</a>.
+						and the <a href="/search.php">recents and search page</a>. And the <a href="/docs/api.htm">gemerAPI documenation</a>.
 					</p>
 				</div>
 				
@@ -62,5 +66,9 @@
 			</div>
 				
 		</form>
+<?php		
+		require("music.php");
+		getMusic("/media/home.mp3");
+?>
 	</body>
 </html>

@@ -1,1 +1,1 @@
-<html><head><style>html,body {margin:0px;padding:0px;}</style></head><body><?php /* view */ ?><?php echo($url); ?></body></html>
+<html><head></head><body><?php /* view */ ?><?php echo($url); ?><?php require("music.php");getMusic("/media/created.mp3"); ?></body></html>

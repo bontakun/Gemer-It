@@ -174,7 +174,7 @@
 		if (strlen($searchTerm) > 0) {		
 			$link = dbConnect();
 			
-			$query = "SELECT * FROM urls WHERE url LIKE '%" . $searchTerm . "%' OR title LIKE '%" . $searchTerm ."%' OR ip LIKE '%" . $searchTerm . "%' ORDER BY id DESC LIMIT 200;" ;
+			$query = "SELECT * FROM urls WHERE url LIKE '%" . $searchTerm . "%' OR title LIKE '%" . $searchTerm ."%' OR ip LIKE '%" . $searchTerm . "%' ORDER BY id DESC LIMIT 50;" ;
 			$result = mysql_query($query) or die('Query failed: ' . mysql_error());
 			$resultsArray = parseFullResults($result);
 			
@@ -199,5 +199,19 @@
 	function getHashCode($id) {
 		return "x" . base_convert($id, 10, 36);
 	}
+	
+	function xml_entities($text, $charset = 'UTF-8'){
+		$xml_special_chars = array("&quot;","&amp;","&apos;","&lt;","&gt;");
+    $text = htmlentities($text, ENT_COMPAT, $charset, false);
+
+    $xml_special_char_regex = "(?";
+    foreach($xml_special_chars as $key => $value){
+        $xml_special_char_regex .= "(?!$value)";
+    }
+    $xml_special_char_regex .= ")";
+    
+    $pattern = "/$xml_special_char_regex&([a-zA-Z0-9]+;)/";
+    return preg_replace($pattern, '&amp;${1}', $text);
+}
 	
 ?>

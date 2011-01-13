@@ -1,36 +1,68 @@
 <div class="urlBlock">
+	
 	<span class="shortUrl">
-  	<a href="http://gemerit.com/<?php echo($result["hash"]); ?>">http://gemerit.com/<?php echo($result["hash"]); ?></a></span>
-  <dl>
+		<a href="http://gemerit.com/<?php echo($result["hash"]); ?>">http://gemerit.com/<?php echo($result["hash"]); ?></a>
+	</span>
+  	
+	<div class="dl">
   <?php if ($result["title"]) { ?>
-  	<dt>Title</dt>
-  	<dd><?php 
-  		//special search code
-  		if (strlen($_REQUEST["searchTerm"]) > 0) {
-  			$searchTerm = $_REQUEST["searchTerm"];
-  			echo(preg_replace("/($searchTerm)/im", '<span class="match">\1</span>', $result["title"]));
-  		} else {
-  			echo($result["title"]); 
-  		}
-  	?></dd>
-	<?php } if ($result["visits"] > 0) { ?> 	
-  	<dt>Visits</dt>
-  	<dd><?php echo($result["visits"]); ?></dd>
+		<div class="lineItem">
+			<span class="label">Title</span>
+			<span class="content"><?php 
+	  		//special search code
+	  		if (strlen($_REQUEST["searchTerm"]) > 0) {
+	  			$searchTerm = preg_replace("/\//", "\\/", $_REQUEST["searchTerm"]);
+	  			echo(preg_replace("/($searchTerm)/im", '<span class="match">\1</span>', htmlentities($result["title"])));
+	  		} else {
+	  			echo(htmlentities($result["title"])); 
+	  		}
+	  	?></span>
+		</div>
+	<?php } if ($result["visits"] > 0) { ?>
+		<div class="lineItem"> 	
+			<span class="label">Visits</span>
+			<span class="content"><?php echo($result["visits"]); ?></span>
+		</div>
   <?php } if ($result["creationDate"] > 0) { ?>
-  	<dt>Created</dt>
-  	<dd><?php echo(date("M j Y", $result["creationDate"])); ?></dd>
+		<div class="lineItem">
+			<span class="label">Created</span>
+			<span class="content"><?php echo(date("M j Y", $result["creationDate"])); ?></span>
+		</div>
   <?php } ?>
-  	<dt>Long Url</dt>
-  	<dd><a href="<?php echo($result["url"]); ?>"><?php 
-  		//special search code
-  		if (strlen($_REQUEST["searchTerm"]) > 0) {
-  			$searchTerm = $_REQUEST["searchTerm"];
-  			echo(preg_replace("/($searchTerm)/im", '<span class="match">\1</span>', $result["url"]));
-  		} else {
-  			echo($result["url"]); 
-  		} 
-  		?></a></dd>
-  </dl>
-  <!-- source ip  <?php echo($result["ip"]); ?> -->
-  <div class="clearer"></div>
+		<div class="lineItem">
+			<span class="label">Long Url</span>
+			<span class="content"><a href="http://gemerit.com/<?php echo($result["hash"]); ?>"><?php 
+	  		//special search code
+	  		if (strlen($_REQUEST["searchTerm"]) > 0) {
+	  			$searchTerm = preg_replace("/\//", "\\/", $_REQUEST["searchTerm"]);
+	  			echo(preg_replace("/($searchTerm)/im", '<span class="match">\1</span>', $result["url"]));
+	  		} else {
+	  			echo($result["url"]); 
+	  		} 
+  		?></a></span>
+		</div>
+		
+<?php 	
+			parse_str(parse_url($result["url"], PHP_URL_QUERY), $params); 			
+			if($_REQUEST["imagesInline"] == "true" || $_COOKIE["imagesInline"] == "true") {
+					if (eregi(".*(\.jpg|\.gif|\.png|\.jpeg)$", $result["url"])) { ?>
+   			 
+		<div class="lineItem">
+			<span class="label">Preview</span>
+			<span class="previewContent">
+					<img src="<?php echo($result["url"]); ?>"/>
+			</span>
+		</div>
+		
+<?php			} else if (stristr($result["url"], ".youtube.com/watch") && $params["v"]) { ?>
+		<div class="lineItem">
+			<span class="label">Preview</span>
+			<span class="previewContent">
+					<iframe class="youtube-player" type="text/html" width="640" height="385" src="http://www.youtube.com/embed/<?php echo($params["v"]); ?>" frameborder="0">
+					</iframe> 
+			</span>
+		</div>
+<?php 	}
+			} ?>
+  </div>
 </div>

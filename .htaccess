@@ -6,8 +6,11 @@ RewriteRule ^about/x(.+)$ /about.php?hash=$1
 
 RewriteCond %{QUERY_STRING} url=(.*)
 RewriteRule ^create.(json|xml|text)$ /create.php?format=$1&url=%1
-
 RewriteRule ^create.(json|xml|text)$ /create.php?format=$1
+
+RewriteCond %{QUERY_STRING} searchTerm=(.*)
+RewriteRule ^search.(rss|xml)$ /search.php?format=$1&searchTerm=%1
+RewriteRule ^search.(rss|xml)$ /search.php?format=$1
 
 RewriteCond %{HTTP_HOST} ^www\.gemerit\.com$
 RewriteRule (.*) http://gemerit.com/$1 [R=Permanent]
