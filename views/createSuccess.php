@@ -19,11 +19,9 @@
 		</div>	
 			
 		<div class="links">	
-			<ul>
-				<li><a href="/">Gemer Up Another</a></li>
-				<li><a href="<?php echo($url); ?>" target="_blank">Test Link (in New Window)</a></li>
-				<li><a href="http://twitter.com/home?status=<?php echo($url); ?>">Post to Twitter</a></li>
-			</ul>
+			<a href="/">Gemer Up Another</a> |
+			<a href="<?php echo($url); ?>" target="_blank">Test Link (in New Window)</a> |
+			<a href="http://twitter.com/home?status=<?php echo($url); ?>">Post to Twitter</a>
 		</div>
 		
 		<div id="footer">

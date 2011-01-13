@@ -94,6 +94,12 @@ div.sections p, div.sections h2 {
 	margin: 5px;
 }
 
+div.links {
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+}
+
 /* global */
 div.headerSection {
 	padding: 4px;
