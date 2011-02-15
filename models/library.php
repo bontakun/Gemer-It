@@ -196,8 +196,21 @@
 		return $resultsArray;
 	}
 	
+	function checkForBadLink($url) {
+		$link = dbConnect();
+		$query = "select hash from google_safe_browsing where hash = '" . md5($url) .  "'";
+		$result = mysql_query($query) or die('Query failed: ' . mysql_error());
+		$returnValue = mysql_num_rows($result) == 0;
+		dbDisconnect($link);
+		return $returnValue;
+	}
+	
 	function getHashCode($id) {
 		return "x" . base_convert($id, 10, 36);
+	}
+	
+	function getId($hash) {
+		return base_convert($hash, 36, 10);
 	}
 	
 	function xml_entities($text, $charset = 'UTF-8'){
