@@ -9,7 +9,7 @@
 	$url = str_ireplace("http://chrome://ietab/content/reloaded.html?url=", "", $url);
 	
 	//check to see if they're giving us a gemerit link, first
-	if (!(preg_match("/http:\/\/gemerit.com\/[0-9abcdef]+$/", $url)) && strlen($url) > 0) {
+	if (validateLink($url)) {
 		
 		//we're going to preppend http if they gave us a url that doesn't already have it
 		if (!preg_match("/^https?:\/\//", $url))
@@ -34,4 +34,16 @@
 		require("views/createSuccessThin.php");
 	else
 		require("views/createSuccess.php");
+		
+		
+	function validateLink($url) {
+		//checking string for content
+		if (strlen($url) == 0) 
+			return false;
+			//checking recursion, basic check
+		if (preg_match("/^http:\/\/([wW]{3}\.)?gemerit.com\/(([0-9abcdef]+)|(x[a-zA-Z0-9]+))$/", $url)) 
+			return false;
+		//doing a basic check to make sure it looks like a url
+		return preg_match("/^(https?:\/\/)?[a-zA-Z0-9]+\.[a-zA-Z]{2,3}(\.[a-zA-Z]{2})?\/?[^ ]*$/", $url);
+	}
 ?>
