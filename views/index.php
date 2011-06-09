@@ -37,7 +37,7 @@
 						This page was primarily built as challenge. It was originally built as an experiment
 						in building simple services in a very short period of time. 
 						Gemer it is a constant work in progress, so be prepared for changes.
-						Please use <a href="http://bonta-kun.net/contact/?subject=gemerit">contact page</a> for reporting bugs.
+						Please use <a href="https://github.com/bontakun/Gemer-It/issues">our GitHub page</a> for reporting bugs.
 					</p>
 				</div>
 				
@@ -60,8 +60,10 @@
 		  	<p>
 		  		Gemer It is built and maintained by 
 		  		<a href="http://twitter.com/bontakun">Benjamin "bonta-kun"</a> 
-		  		of <a href="http://bonta-kun.net">bonta-kun.net</a>. Source code is available at
-		  		<a href="http://gemerit.com/62">the bonta-kun.net svn repository</a>.
+		  		of <a href="http://bonta-kun.net">bonta-kun.net</a>. 
+		  		<br />
+		  		Source code is available at
+		  		<a href="https://github.com/bontakun/Gemer-It">Gemer It's GitHub page</a>.
 		  	</p>
 			</div>
 				

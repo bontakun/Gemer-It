@@ -8,8 +8,9 @@
 	// Create Link function
 	//
 	function createLink($url, $title) {
-		$url = str_replace("%", "\%", $url);
-		$title = str_replace("%", "\%", $title);
+		//todo, make this into a method and convert to regex.
+		//$url = str_replace("_", "\_", str_replace("%", "\%", $url));
+		//$title = str_replace("_", "\_", str_replace("%", "\%", $title));
 		$link = getDbConnect();
 	
 		//attempt to retrieve the item
@@ -18,7 +19,7 @@
 		$results = $preparedStatement->fetchAll();
 		
 		//if it's not there we need to insert and retrieve
-		if (count($result) > 0) {
+		if (count($results) > 0) {
 			return getHashCode($results[0]["id"]);
 		} else {
 			//insert
