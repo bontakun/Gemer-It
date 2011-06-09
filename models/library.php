@@ -8,9 +8,6 @@
 	// Create Link function
 	//
 	function createLink($url, $title) {
-		//todo, make this into a method and convert to regex.
-		//$url = str_replace("_", "\_", str_replace("%", "\%", $url));
-		//$title = str_replace("_", "\_", str_replace("%", "\%", $title));
 		$link = getDbConnect();
 	
 		//attempt to retrieve the item
