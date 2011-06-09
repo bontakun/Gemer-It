@@ -11,7 +11,7 @@
 		$link = getDbConnect();
 	
 		//attempt to retrieve the item
-		$preparedStatement = $link->prepare("SELECT id FROM urls WHERE url LIKE :url;");
+		$preparedStatement = $link->prepare("SELECT id FROM urls WHERE url = :url;");
 		$preparedStatement->execute(array(":url" => $url));
 		$results = $preparedStatement->fetchAll();
 		
@@ -25,9 +25,12 @@
 				":url" => $url, 
 				":modTime" => time(), 
 				":ip" => $_ENV["REMOTE_ADDR"], 
-				":title" => $title));
+				":title" => $title)); 
 			
-			$preparedStatement = $link->prepare("SELECT id FROM urls WHERE url LIKE :url;");
+			//check for insert error
+			checkForDbError($preparedStatement);
+
+			$preparedStatement = $link->prepare("SELECT id FROM urls WHERE url = :url;");
 			$preparedStatement->execute(array(":url" => $url));
 			$results = $preparedStatement->fetchAll();
 			return getHashCode($results[0]["id"]);
@@ -47,7 +50,7 @@
 			$id = hexdec($hash);
 
 		//do our search
-		$preparedStatement = $link->prepare("SELECT url FROM urls WHERE id LIKE :id;");
+		$preparedStatement = $link->prepare("SELECT url FROM urls WHERE id = :id;");
 		$preparedStatement->execute(array(":id" => $id));
 		$results = $preparedStatement->fetchAll();
 	
@@ -55,7 +58,7 @@
 		$url = stripslashes($results[0]["url"]);
 		
 		$query = "UPDATE urls SET visits = visits+1 WHERE id = " . $id;
-		$preparedStatement = $link->prepare("UPDATE urls SET visits = visits+1 WHERE id LIKE :id;");
+		$preparedStatement = $link->prepare("UPDATE urls SET visits = visits+1 WHERE id = :id;");
 		$preparedStatement->execute(array(":id" => $id));
 		
 		return $url;
@@ -71,7 +74,7 @@
 		$id = base_convert($hash, 36, 10);
 
 		//do our search
-		$preparedStatement = $link->prepare("SELECT * FROM urls WHERE id LIKE :id;");
+		$preparedStatement = $link->prepare("SELECT * FROM urls WHERE id = :id;");
 		$preparedStatement->execute(array(":id" => $id));
 		return parseFullResults($preparedStatement->fetchAll());
 	}
@@ -82,7 +85,7 @@
 	function getRecents() {
 		$link = getDbConnect();
 		$preparedStatement = $link->prepare("SELECT * FROM urls ORDER BY id DESC LIMIT 50;");
-		$preparedStatement->execute(array(":count" => $count));
+		$preparedStatement->execute(array());
 		return parseFullResults($preparedStatement->fetchAll());
 	}
 	
@@ -92,7 +95,7 @@
 	function getTopLinks() {
 		$link = getDbConnect();
 		$preparedStatement = $link->prepare("SELECT * FROM urls ORDER BY visits DESC LIMIT 50;");
-		$preparedStatement->execute(array(":count" => $count));
+		$preparedStatement->execute(array());
 		return parseFullResults($preparedStatement->fetchAll());
 	}
 	
@@ -104,6 +107,7 @@
 			$link = getDbConnect();
 			$preparedStatement = $link->prepare("SELECT * FROM urls WHERE url LIKE :searchTerm OR title LIKE :searchTerm OR ip LIKE :searchTerm ORDER BY id DESC LIMIT 50;");
 			$preparedStatement->execute(array(":searchTerm" => "%$searchTerm%"));
+			checkForDbError($preparedStatement);
 			return parseFullResults($preparedStatement->fetchAll());
 		} else {
 			return getRecents();
@@ -132,6 +136,16 @@
 	function getId($hash) {
 		return base_convert($hash, 36, 10);
 	}
+	
+	//
+	// This checks the prepared statement for errors
+	//
+	function checkForDbError($preparedStatement) {
+			$error = $preparedStatement->errorInfo();
+			if ($error != null && count($error) > 0 && $error[0] > 0)
+				die("Insert failed on: $error[2]");
+	}
+	
 	
 	function xml_entities($text, $charset = 'UTF-8'){
 		$xml_special_chars = array("&quot;","&amp;","&apos;","&lt;","&gt;");
