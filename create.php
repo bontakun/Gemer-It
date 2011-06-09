@@ -35,7 +35,6 @@
 	else
 		require("views/createSuccess.php");
 		
-		
 	function validateLink($url) {
 		//checking string for content
 		if (strlen($url) == 0) 
@@ -44,7 +43,7 @@
 		if (preg_match("/^http:\/\/([wW]{3}\.)?gemerit.com\/(([0-9abcdef]+)|(x[a-zA-Z0-9]+))$/", $url)) 
 			return false;
 		//doing a basic check to make sure it looks like a url
-		if (!preg_match("/^(https?:\/\/)?[a-zA-Z0-9]+\.[a-zA-Z]{2,3}(\.[a-zA-Z]{2})?\/?[^ ]*$/", $url))
+		if (!preg_match("/^(https?:\/\/)?[^.]+\.[a-zA-Z]{2,3}(\.[a-zA-Z]{2})?\/?.*$/mi", $url))
 			return false;
 		return checkForBadLink($url);
 	}

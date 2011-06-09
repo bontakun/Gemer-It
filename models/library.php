@@ -1,76 +1,65 @@
 <?
-	function dbConnect() {
+	function getDbConnect() {
 		require("config.php");
-	
-		$link = mysql_connect($DB_HOST, $DB_USER, $DB_PASS) 
-			or die('Could not connect: ' . mysql_error());
-		mysql_select_db($DB_NAME) 
-			or die('Could not select database');
-		return $link;
-	}
-	
-	function dbDisconnect($link) {
-		mysql_close($link);
+		return new PDO('mysql:host='.$DB_HOST.';dbname='. $DB_NAME, $DB_USER, $DB_PASS);
 	}
 	
 	//
 	// Create Link function
 	//
 	function createLink($url, $title) {
-		$title = preg_replace("/[']+/im", "", trim($title));
-	
-		$link = dbConnect();
+		$url = str_replace("%", "\%", $url);
+		$title = str_replace("%", "\%", $title);
+		$link = getDbConnect();
 	
 		//attempt to retrieve the item
-		$query = "SELECT id FROM urls WHERE url = '" . 
-				addslashes($url) . "';";
-		$result = mysql_query($query) or die('Query failed: ' . mysql_error());
+		$preparedStatement = $link->prepare("SELECT id FROM urls WHERE url LIKE :url;");
+		$preparedStatement->execute(array(":url" => $url));
+		$results = $preparedStatement->fetchAll();
 		
 		//if it's not there we need to insert and retrieve
-		if (mysql_num_rows($result) == 0) {
+		if (count($result) > 0) {
+			return getHashCode($results[0]["id"]);
+		} else {
 			//insert
-			$query = "INSERT INTO urls (url, creationDate, ip, title) VALUES ('" . 
-				addslashes($url) . "', " . time() .  ", '" . $_ENV["REMOTE_ADDR"] . "', '" . 
-				$title . "');";
-			mysql_query($query) or die('Query failed: ' . mysql_error());
+			$preparedStatement = $link->prepare("INSERT INTO urls (url, creationDate, ip, title) VALUES (:url, :modTime, :ip, :title);");
+			$preparedStatement->execute(array(
+				":url" => $url, 
+				":modTime" => time(), 
+				":ip" => $_ENV["REMOTE_ADDR"], 
+				":title" => $title));
 			
-			//get back the thing we just inserted
-			$query = "SELECT id FROM urls WHERE url = '" . 
-				addslashes($url) . "';";
-			$result = mysql_query($query) or die('Query failed: ' . mysql_error());	
+			$preparedStatement = $link->prepare("SELECT id FROM urls WHERE url LIKE :url;");
+			$preparedStatement->execute(array(":url" => $url));
+			$results = $preparedStatement->fetchAll();
+			return getHashCode($results[0]["id"]);
 		}
-		
-		//get results in easy to use array format
-		$resultArray = mysql_fetch_assoc($result);
-		
-		dbDisconnect($link);
-		return getHashCode($resultArray["id"]);
 	}
 	
 	//
 	// Get Link function
 	//
 	function getLink($hash, $newHash) {
-		$link = dbConnect();
+		$link = getDbConnect();
 	
 		//get the id
 		if ($newHash) 
 			$id = base_convert($hash, 36, 10);
 		else
-			$id =  hexdec($hash);
+			$id = hexdec($hash);
 
 		//do our search
-		$query = "SELECT url FROM urls WHERE id = " . $id . ";";
-		$result = mysql_query($query) or die('Query failed: ' . mysql_error());
-		$resultArray = mysql_fetch_assoc($result);
+		$preparedStatement = $link->prepare("SELECT url FROM urls WHERE id LIKE :id;");
+		$preparedStatement->execute(array(":id" => $id));
+		$results = $preparedStatement->fetchAll();
 	
 		//cleanup our URL
-		$url = stripslashes($resultArray["url"]);
+		$url = stripslashes($results[0]["url"]);
 		
 		$query = "UPDATE urls SET visits = visits+1 WHERE id = " . $id;
-		mysql_query($query);
+		$preparedStatement = $link->prepare("UPDATE urls SET visits = visits+1 WHERE id LIKE :id;");
+		$preparedStatement->execute(array(":id" => $id));
 		
-		dbDisconnect($link);
 		return $url;
 	}
 	
@@ -78,131 +67,64 @@
 	// This gets every piece of info about a given link
 	//
 	function getLinkInfo($hash) {
-		$link = dbConnect();
+		$link = getDbConnect();
 	
 		//get the id
 		$id = base_convert($hash, 36, 10);
 
 		//do our search
-		$query = "SELECT * FROM urls WHERE id = " . $id . ";";
-		$result = mysql_query($query) or die('Query failed: ' . mysql_error());
-		$results = parseFullResults($result);
-		
-		dbDisconnect($link);
-		return $results;
+		$preparedStatement = $link->prepare("SELECT * FROM urls WHERE id LIKE :id;");
+		$preparedStatement->execute(array(":id" => $id));
+		return parseFullResults($preparedStatement->fetchAll());
 	}
 	
 	//
 	// Get Recent Links function
 	//
-	function getRecents($count) {
-		$link = dbConnect();
-	
-		$query = "SELECT * FROM urls ORDER BY id DESC LIMIT " . $count . ";";
-		$result = mysql_query($query) or die('Query failed: ' . mysql_error());
-		$recentShortens = parseFullResults($result);
-		
-		dbDisconnect($link);
-		return $recentShortens;
-	}
-	
-	//
-	// This function duplicates code with createLink, need to fix that,
-	// also this name is not final, it really should be tweaked.
-	//
-	function getHexForURL($url) {
-		$link = dbConnect();
-		
-		$query = "SELECT id FROM urls WHERE url = '" . 
-				addslashes($url) . "';";
-		$result = mysql_query($query) or die('Query failed: ' . mysql_error());
-		
-		if (mysql_num_rows($result) > 0) {
-			$resultArray = mysql_fetch_assoc($result);
-			dbDisconnect($link);
-			return getHashCode($resultArray["id"]);
-		}
-		else {
-			dbDisconnect($link);
-			return "";
-		}
-	}
-	
-	//
-	// This get the top links and is organized by day
-	//
-	function getTotalCountsByDay() {
-		$link = dbConnect();
-		
-		$dateArray = array();
-		
-		$query = "SELECT creationDate FROM urls WHERE creationDate > 0;";
-		$result = mysql_query($query) or die('Query failed: ' . mysql_error());
-		
-		while($resultArray = mysql_fetch_array($result, MYSQL_ASSOC)) {
-			$dateString = strtotime(date("F j, Y", $resultArray["creationDate"]));
-			$dateArray[$dateString] = $dateArray[$dateString] + 1;
-		}
-		
-		dbDisconnect($link);
-		return $dateArray;
+	function getRecents() {
+		$link = getDbConnect();
+		$preparedStatement = $link->prepare("SELECT * FROM urls ORDER BY id DESC LIMIT 50;");
+		$preparedStatement->execute(array(":count" => $count));
+		return parseFullResults($preparedStatement->fetchAll());
 	}
 	
 	//
 	//
 	//
-	function getTopLinks($count) {
-		$link = dbConnect();
-		
-		$resultsArray = array();
-		
-		$query = "SELECT * FROM urls ORDER BY visits DESC LIMIT " . $count . ";";
-		$result = mysql_query($query) or die('Query failed: ' . mysql_error());
-		$resultsArray = parseFullResults($result);
-		
-		dbDisconnect($link);
-		return $resultsArray;
+	function getTopLinks() {
+		$link = getDbConnect();
+		$preparedStatement = $link->prepare("SELECT * FROM urls ORDER BY visits DESC LIMIT 50;");
+		$preparedStatement->execute(array(":count" => $count));
+		return parseFullResults($preparedStatement->fetchAll());
 	}
 	
 	//
 	// This function performs a search on the database
 	//
 	function doSearch($searchTerm) {
-		$searchTerm = preg_replace("/[']+/im", "", trim($searchTerm));
-		$resultsArray = array();
-		
 		if (strlen($searchTerm) > 0) {		
-			$link = dbConnect();
-			
-			$query = "SELECT * FROM urls WHERE url LIKE '%" . $searchTerm . "%' OR title LIKE '%" . $searchTerm ."%' OR ip LIKE '%" . $searchTerm . "%' ORDER BY id DESC LIMIT 50;" ;
-			$result = mysql_query($query) or die('Query failed: ' . mysql_error());
-			$resultsArray = parseFullResults($result);
-			
-			dbDisconnect($link);
+			$link = getDbConnect();
+			$preparedStatement = $link->prepare("SELECT * FROM urls WHERE url LIKE :searchTerm OR title LIKE :searchTerm OR ip LIKE :searchTerm ORDER BY id DESC LIMIT 50;");
+			$preparedStatement->execute(array(":searchTerm" => "%$searchTerm%"));
+			return parseFullResults($preparedStatement->fetchAll());
 		} else {
-			$resultsArray = getRecents(30);
+			return getRecents();
 		}
-		return $resultsArray;		
 	}
 	
-	function parseFullResults($result) {
-		$resultsArray = array();
-		$i = 0;
-		while ($resultArray = mysql_fetch_array($result, MYSQL_ASSOC)) {
-			$resultsArray[$i] = $resultArray;
-			$resultsArray[$i]["hash"] = getHashCode($resultArray["id"]);
-			$i++;
+	function parseFullResults($results) {
+		for ($i = 0; $i < count($results); $i++) {
+			$results[$i]["hash"] = getHashCode($results[$i]["id"]);
+			$results[$i]["title"] = stripslashes($results[$i]["title"]);
 		}
-		return $resultsArray;
+		return $results;
 	}
 	
 	function checkForBadLink($url) {
-		$link = dbConnect();
-		$query = "select hash from google_safe_browsing where hash = '" . md5($url) .  "'";
-		$result = mysql_query($query) or die('Query failed: ' . mysql_error());
-		$returnValue = mysql_num_rows($result) == 0;
-		dbDisconnect($link);
-		return $returnValue;
+		$link = getDbConnect();
+		$preparedStatement = $link->prepare("select hash from google_safe_browsing where hash = :hash;");
+		$preparedStatement->execute(array(":hash" => md5($url)));
+		return count($preparedStatement->fetchAll()) == 0;
 	}
 	
 	function getHashCode($id) {
