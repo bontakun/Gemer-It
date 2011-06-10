@@ -56,7 +56,7 @@
 		//cleanup our URL
 		$url = stripslashes($results[0]["url"]);
 		
-		$preparedStatement = $link->exec("UPDATE urls SET visits = visits+1 WHERE id = :id;");
+		$preparedStatement = $link->prepare("UPDATE urls SET visits = visits+1 WHERE id = :id;");
 		$preparedStatement->execute(array(":id" => $id));
 		return $url;
 	}
