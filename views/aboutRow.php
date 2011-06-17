@@ -18,6 +18,11 @@
 	  		}
 	  	?></span>
 		</div>
+	<?php } if ($showId) { ?>	
+		<div class="lineItem"> 	
+			<span class="label">Database ID</span>
+			<span class="content"><?php echo($result["id"]); ?></span>
+		</div>
 	<?php } if ($result["visits"] > 0) { ?>
 		<div class="lineItem"> 	
 			<span class="label">Visits</span>
