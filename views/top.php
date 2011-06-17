@@ -1,4 +1,6 @@
-<?php /* view */ ?>
+<?php /* view */ 
+	$showId = $_REQUEST["showId"]; 
+?>
 <html>
 	<head>
 		<title>Gemer It: Top Links</title>

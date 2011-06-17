@@ -1,4 +1,6 @@
 <?php /* controller/model */ 
+	$showId = $_REQUEST["showId"];
+	
 	require("models/library.php");
 	$results = doSearch($_REQUEST['searchTerm']);
 	
