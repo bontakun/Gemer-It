@@ -9,5 +9,8 @@
 		else
 			$url = getLink($_REQUEST["hash"], false);
 	}
-	header( 'Location: ' . $url, true);
+	if ($url)
+		header( 'Location: ' . $url, true);
+	else 
+		header( 'Location: /error.php', true);
 ?>

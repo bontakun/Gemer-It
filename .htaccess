@@ -17,4 +17,7 @@ RewriteRule (.*) http://gemerit.com/$1 [R=Permanent]
 
 Redirect 301 /recents.php http://gemerit.com/search.php
 
+ErrorDocument 404 /error.php
+ErrorDocument 500 /error.php
+
 AddHandler php5-script .php
