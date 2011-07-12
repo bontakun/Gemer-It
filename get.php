@@ -2,7 +2,7 @@
 	require("models/library.php");
 
 	if ($_COOKIE["previewUrl"] == "true") {
-		$url = "http://gemerit.com/about/" . $_REQUEST["hash"];
+		$url = "http://" . $_SERVER["SERVER_NAME"] . "/about/" . $_REQUEST["hash"];
 	} else {
 		if ($_REQUEST["new"])
 			$url = getLink($_REQUEST["hash"], true);

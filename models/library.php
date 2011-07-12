@@ -113,6 +113,16 @@
 	}
 	
 	//
+	// This function retrieves a random element
+	//
+	function getRandomLink() {
+		$link = getDbConnect();
+		$preparedStatement = $link->prepare("SELECT * FROM urls ORDER BY RAND() LIMIT 1;");
+		$preparedStatement->execute(array());
+		return parseFullResults($preparedStatement->fetchAll());
+	}
+	
+	//
 	// Parses the results, corrects and adds elemeents as needed.
 	//
 	function parseFullResults($results) {
